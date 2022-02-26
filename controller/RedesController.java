@@ -3,6 +3,7 @@ package controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 import javax.swing.JOptionPane;
 
@@ -29,20 +30,23 @@ public class RedesController {
         
         Process process = initProcess(command);
 
-        InputStreamReader stream = new InputStreamReader(process.getInputStream());
+        InputStreamReader stream = new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8);
         BufferedReader buffer = new BufferedReader(stream);
 
         // nome do adaptador
         String adaptador = "";
+        // buffer para acumular as informações para impressão futura
+        String info_accumulator = "";
         try {
             String line = buffer.readLine();
             while(line != null) {
                 if(line.contains("Adaptador"))
                     adaptador = line;
                 if(line.contains("IPv4"))
-                    System.out.println(adaptador + " \n" + line);
+                    info_accumulator += adaptador + "\n" + line + "\n";
                 line = buffer.readLine();
             }
+            JOptionPane.showMessageDialog(null, info_accumulator);
         }catch(IOException e) {
             System.err.println("Chamada inválida");
         }
