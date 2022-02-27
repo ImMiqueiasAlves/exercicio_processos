@@ -42,7 +42,7 @@ public class RedesController {
             while(line != null) {
                 if(line.contains("Adaptador"))
                     adaptador = line;
-                if(line.contains("IPv4"))
+                if(line.contains("IPv4") || line.contains("inet"))
                     info_accumulator += adaptador + "\n" + line + "\n";
                 line = buffer.readLine();
             }
@@ -70,11 +70,19 @@ public class RedesController {
             while(line != null) {
                     
                 System.out.println(line);
+                // Pattern considera apenas Windows no idioma pt_BR
                 if(line.contains("dia")) {
                     String []lineVector = line.split("ms");
                     int size = lineVector.length;
                     String media = lineVector[size-1].replaceAll("\\D+", "");
                     JOptionPane.showMessageDialog(null, "Média: " + media + "ms");
+                }
+                // Pattern considera apenas Linux no idioma US_en.
+                if(line.contains("rtt")) {
+                	String []lineVector = line.split(" ");
+                	int size = lineVector.length;
+                	String media = lineVector[size-2].split("/")[1];
+                	JOptionPane.showMessageDialog(null, "\nMédia: " + media + "ms");
                 }
                 line = buffer.readLine();
             }
